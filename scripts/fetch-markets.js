@@ -1,10 +1,12 @@
 // Node 18+: มี fetch ให้ใช้ในตัว
 // ดึง: VIX, U.S. 10Y, Crude Oil, Gold จาก Investing -> เขียนเป็น data/latest.json
+// พร้อม dump debug html/text ของแต่ละหน้าไว้ใน data/
 
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "fs";
 
 const OUT_DIR = "data";
 const OUT_FILE = `${OUT_DIR}/latest.json`;
+const DEBUG_DIR = "data";
 
 const SOURCES = {
   vix: "https://www.investing.com/indices/us-spx-vix-futures",
@@ -15,6 +17,17 @@ const SOURCES = {
 
 function log(...args) {
   console.log("[fetch]", ...args);
+}
+
+function ensureDir(dir) {
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+  }
+}
+
+function saveDebugFile(name, content) {
+  ensureDir(DEBUG_DIR);
+  writeFileSync(`${DEBUG_DIR}/debug-${name}.txt`, content || "");
 }
 
 async function fetchHtml(url) {
@@ -56,6 +69,7 @@ function htmlToText(html) {
   if (!html) return "";
 
   return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/gi, " ")
@@ -68,8 +82,16 @@ function htmlToText(html) {
 
 function debugSnippet(name, html) {
   const text = htmlToText(html);
+
+  const htmlHead = html.slice(0, 3000);
+  const textHead = text.slice(0, 3000);
+
+  saveDebugFile(`${name}-html`, htmlHead);
+  saveDebugFile(`${name}-text`, textHead);
+
   log(`${name} html[0..500]:`, html.slice(0, 500));
   log(`${name} text[0..700]:`, text.slice(0, 700));
+
   return text;
 }
 
@@ -122,7 +144,6 @@ function parseVix(text) {
 }
 
 function parseUs10Y(text) {
-  // หน้านี้ static HTML มักมี Prev. Close ชัด แต่ current price อาจไม่มี
   const price = firstMatchNumber(text, [
     /United States 10-Year Bond Yield[^0-9]{1,80}([0-9,]+\.\d{3})/i,
     /U\.?S\.? 10 Year Treasury Yield[^0-9]{1,80}([0-9,]+\.\d{3})/i,
@@ -161,12 +182,15 @@ async function main() {
     gold: { price: null, prevClose: null, pct: null }
   };
 
+  ensureDir(OUT_DIR);
+
   for (const [key, url] of Object.entries(SOURCES)) {
     try {
+      log(`Fetching ${key}: ${url}`);
       const html = await fetchHtml(url);
       const text = debugSnippet(key, html);
 
-      if (/Just a moment|Access denied|captcha|verify you are human/i.test(text)) {
+      if (/Just a moment|Access denied|captcha|verify you are human|blocked/i.test(text)) {
         throw new Error(`Blocked page detected for ${key}`);
       }
 
@@ -175,9 +199,10 @@ async function main() {
       if (key === "vix") result.vix = parseVix(text);
       if (key === "us10y") result.us10y = parseUs10Y(text);
 
-      log(`${key} parsed =>`, result[key === "gold" ? "gold" : key]);
+      log(`${key} parsed =>`, result[key]);
     } catch (e) {
       log(`WARN ${key}:`, String(e));
+      saveDebugFile(`${key}-error`, String(e));
     }
   }
 
@@ -194,10 +219,6 @@ async function main() {
   }
 
   mergeFallback(result, prev);
-
-  if (!existsSync(OUT_DIR)) {
-    mkdirSync(OUT_DIR, { recursive: true });
-  }
 
   writeFileSync(OUT_FILE, JSON.stringify(result, null, 2));
   log("Wrote", OUT_FILE);
