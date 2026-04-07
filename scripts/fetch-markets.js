@@ -1,6 +1,6 @@
 // Node 18+: มี fetch ให้ใช้ในตัว
 // ดึง: VIX, U.S. 10Y, Crude Oil, Gold จาก Investing -> เขียนเป็น data/latest.json
-// พร้อม dump debug html/text ของแต่ละหน้าไว้ใน data/
+// พร้อม dump debug html/text/error ของแต่ละหน้าไว้ใน data/
 
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "fs";
 
@@ -172,6 +172,19 @@ function mergeFallback(next, prev) {
   }
 }
 
+function allParsedNull(result) {
+  return (
+    result.vix.price == null &&
+    result.vix.prevClose == null &&
+    result.us10y.price == null &&
+    result.us10y.prevClose == null &&
+    result.crudeOil.price == null &&
+    result.crudeOil.prevClose == null &&
+    result.gold.price == null &&
+    result.gold.prevClose == null
+  );
+}
+
 async function main() {
   const result = {
     ts: new Date().toISOString(),
@@ -219,6 +232,13 @@ async function main() {
   }
 
   mergeFallback(result, prev);
+
+  if (allParsedNull(result)) {
+    saveDebugFile("fatal", JSON.stringify(result, null, 2));
+    throw new Error(
+      "All parsers returned null. Check data/debug-*-html.txt and data/debug-*-text.txt"
+    );
+  }
 
   writeFileSync(OUT_FILE, JSON.stringify(result, null, 2));
   log("Wrote", OUT_FILE);
