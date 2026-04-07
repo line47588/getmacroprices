@@ -1,9 +1,9 @@
 name: Fetch Macro Prices
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "7,12,17,22,27,32,37,42,47,52,57 * * * *"
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,18 +19,26 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm install
+          node-version: 20
 
       - name: Run fetch script
         run: node scripts/fetch-markets.js
 
+      - name: Show debug files
+        if: always()
+        run: |
+          ls -la data || true
+          for f in data/debug-*.txt; do
+            echo "===== $f ====="
+            head -c 1500 "$f" || true
+            echo
+          done
+
       - name: Commit updated data
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest.json
+          git add data/latest.json data/debug-*.txt
           git diff --cached --quiet || git commit -m "chore: update macro prices $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           git push
