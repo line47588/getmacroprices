@@ -1,0 +1,24 @@
+{
+  "ts": "2026-04-07T01:39:15.385Z",
+  "source": "investing",
+  "vix": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
+  },
+  "us10y": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
+  },
+  "crudeOil": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
+  },
+  "gold": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
+  }
+}
