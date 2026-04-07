@@ -1,10 +1,24 @@
 {
-  "ts": "2026-04-07T01:03:50.410Z",
-  "xauusd": 4657.799805,
-  "xagusd": 72.389,
-  "fng": {
-    "value": 11,
-    "classification": "Extreme Fear"
+  "ts": "2026-04-07T01:19:44.867Z",
+  "source": "investing",
+  "vix": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
   },
-  "usd_thb": 32.54
+  "us10y": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
+  },
+  "crudeOil": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
+  },
+  "gold": {
+    "price": null,
+    "prevClose": null,
+    "pct": null
+  }
 }
