@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-07T01:32:09.099Z",
+  "ts": "2026-04-14T09:27:23.702Z",
   "source": "investing",
   "vix": {
     "price": null,
@@ -17,8 +17,8 @@
     "pct": null
   },
   "gold": {
-    "price": null,
-    "prevClose": null,
-    "pct": null
+    "price": 4784.41,
+    "prevClose": 4740.32,
+    "pct": 0.9301
   }
 }
