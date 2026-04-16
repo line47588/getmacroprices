@@ -1,5 +1,5 @@
 {
-  "ts": "2026-04-16T10:47:24.655Z",
+  "ts": "2026-04-16T11:43:47.191Z",
   "source": "investing",
   "vix": {
     "price": 20.32,
@@ -12,13 +12,13 @@
     "pct": null
   },
   "crudeOil": {
-    "price": 97.23,
-    "prevClose": 99.08,
-    "pct": -1.8672
+    "price": 91.5,
+    "prevClose": 91.29,
+    "pct": 0.23
   },
   "gold": {
-    "price": 4770.39,
-    "prevClose": 4740.32,
-    "pct": 0.6343
+    "price": 4817.01,
+    "prevClose": 4790.8,
+    "pct": 0.5471
   }
 }
