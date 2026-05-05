@@ -1,24 +1,24 @@
 {
-  "ts": "2026-05-05T16:17:27.881Z",
+  "ts": "2026-05-05T17:52:05.200Z",
   "source": "investing",
   "vix": {
-    "price": 19.62,
+    "price": 19.5,
     "prevClose": 19.95,
-    "pct": -1.6541
+    "pct": -2.2556
   },
   "us10y": {
-    "price": 98.609,
+    "price": 96.365,
     "prevClose": 4.449,
-    "pct": 2116.4307
+    "pct": 2065.9924
   },
   "crudeOil": {
-    "price": 102.03,
+    "price": 101.8,
     "prevClose": 106.42,
-    "pct": -4.1252
+    "pct": -4.3413
   },
   "gold": {
-    "price": 4565.04,
+    "price": 4560.53,
     "prevClose": 4523.88,
-    "pct": 0.9098
+    "pct": 0.8101
   }
 }
