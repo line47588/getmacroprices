@@ -1,10 +1,10 @@
 {
-  "ts": "2026-06-21T17:53:49.128Z",
+  "ts": "2026-06-21T19:06:58.611Z",
   "source": "investing",
   "vix": {
     "price": 18.55,
-    "prevClose": 18.49,
-    "pct": 0.3245
+    "prevClose": 18.55,
+    "pct": 0
   },
   "us10y": {
     "price": 98.609,
@@ -18,7 +18,7 @@
   },
   "gold": {
     "price": 4160.26,
-    "prevClose": 4209.15,
-    "pct": -1.1615
+    "prevClose": 4160.26,
+    "pct": 0
   }
 }
